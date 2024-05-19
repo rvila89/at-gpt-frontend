@@ -16,6 +16,7 @@ export const generatePdfUseCase = async (
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
       }
     )
 

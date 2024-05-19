@@ -13,6 +13,7 @@ export const consultPartnersUseCase = async (
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
     })
 
     const result = {
