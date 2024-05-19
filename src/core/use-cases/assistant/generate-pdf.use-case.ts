@@ -1,7 +1,13 @@
+interface GeneratePdfResponse {
+  success: boolean
+  data: Blob
+  message: string
+}
+
 export const generatePdfUseCase = async (
   idPersona: number,
   setIsLoading: (isLoading: boolean) => void
-) => {
+): Promise<GeneratePdfResponse> => {
   try {
     const resp = await fetch(
       `${import.meta.env.VITE_AT_GPT_API}/personas/${idPersona}`,
@@ -16,6 +22,7 @@ export const generatePdfUseCase = async (
     const result = {
       success: false,
       message: '',
+      data: new Blob(),
     }
     if (!resp.ok) {
       if (resp.status === 400) {
@@ -34,6 +41,7 @@ export const generatePdfUseCase = async (
     return result
   } catch (error) {
     console.error('Error:', error)
+    //@ts-expect-error De momento obviamos
     return error
   } finally {
     setIsLoading(false)

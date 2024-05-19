@@ -5,7 +5,7 @@ interface UploadFileResponse {
 }
 
 export const uploadFileUseCase = async (
-  pdfFile,
+  pdfFile: File,
   setIsLoading: (isLoading: boolean) => void
 ): Promise<UploadFileResponse> => {
   try {
@@ -39,6 +39,7 @@ export const uploadFileUseCase = async (
     return result
   } catch (error) {
     console.error('Error:', error)
+    //@ts-expect-error De momento obviamos
     return error
   } finally {
     setIsLoading(false)

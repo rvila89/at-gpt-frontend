@@ -37,6 +37,7 @@ export const consultPartnersUseCase = async (
     return result
   } catch (error) {
     console.error('Error:', error)
+    //@ts-expect-error De momento obviamos
     return error
   } finally {
     setIsLoading(false)

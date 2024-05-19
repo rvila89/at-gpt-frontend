@@ -8,21 +8,23 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 export const PDFViewer = () => {
-  const [pdfFile, setPdfFile] = useState(null)
-  const [pdfView, setPdfView] = useState(null)
+  const [pdfFile, setPdfFile] = useState<File | null>(null)
+  const [pdfView, setPdfView] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const fileType = ['application/pdf']
 
-  const handleChange = (e) => {
-    const selectedFile = e.target.files[0]
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0] || null
     setPdfFile(selectedFile)
     if (selectedFile) {
       if (selectedFile && fileType.includes(selectedFile.type)) {
-        let reader = new FileReader()
+        const reader = new FileReader()
         reader.readAsDataURL(selectedFile)
         reader.onload = (e) => {
-          setPdfView(e.target.result)
+          if (e.target) {
+            setPdfView(e.target.result as string)
+          }
         }
       } else {
         setPdfView(null)
@@ -32,12 +34,14 @@ export const PDFViewer = () => {
     }
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
-    const resp = await uploadFileUseCase(pdfFile, setIsLoading)
-    if (!resp.success) toast.error(resp.message)
-    else toast.success(resp.message)
+    if (pdfFile) {
+      const resp = await uploadFileUseCase(pdfFile, setIsLoading)
+      if (!resp.success) toast.error(resp.message)
+      else toast.success(resp.message)
+    }
   }
 
   return (

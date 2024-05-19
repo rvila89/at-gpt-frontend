@@ -3,7 +3,19 @@ import { generatePdfUseCase } from '../../core/use-cases/assistant/generate-pdf.
 import Spinner from './Spinner'
 import { ToastContainer, toast } from 'react-toastify'
 
-const TableComponent = ({ data }) => {
+interface DataType {
+  id_persona: number
+  nombre: string
+  apellidos: string
+  email: string
+  telefono: string
+}
+
+interface TableComponentProps {
+  data: DataType[]
+}
+
+const TableComponent: React.FC<TableComponentProps> = ({ data }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const headers = Object.keys(data[0]).filter((key) => key !== 'id_persona')
