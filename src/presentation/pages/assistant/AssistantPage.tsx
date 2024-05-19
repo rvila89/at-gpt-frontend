@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import {
   GptMessage,
@@ -6,10 +6,7 @@ import {
   TypingLoader,
   TextMessageBox,
 } from '../../components'
-import {
-  createThreadUseCase,
-  postQuestionUseCase,
-} from '../../../core/use-cases'
+import { postQuestionUseCase } from '../../../core/use-cases'
 
 interface Message {
   text: string
@@ -20,25 +17,7 @@ export const AssistantPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
 
-  const [threadId, setThreadId] = useState<string>()
-
-  // obtener el thread y si no existe crearlo
-
-  useEffect(() => {
-    const threadId = localStorage.getItem('threadId')
-    if (threadId) {
-      setThreadId(threadId)
-    } else {
-      createThreadUseCase().then((id) => {
-        setThreadId(id)
-        localStorage.setItem('threadId', id)
-      })
-    }
-  }, [])
-
   const handlePost = async (text: string) => {
-    if (!threadId) return
-
     setIsLoading(true)
     setMessages((prev) => [...prev, { text: text, isGpt: false }])
 
@@ -57,15 +36,6 @@ export const AssistantPage = () => {
         isGpt: true,
       },
     ])
-
-    // for (const reply of replies) {
-    //   for (const message of reply.content) {
-    //     setMessages((prev) => [
-    //       ...prev,
-    //       { text: message, isGpt: reply.role === 'assistant', info: reply },
-    //     ])
-    //   }
-    // }
   }
 
   return (
